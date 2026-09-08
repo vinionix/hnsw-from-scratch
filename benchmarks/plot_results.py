@@ -27,9 +27,29 @@ def _values(rows: list[dict[str, float | str]], key: str) -> list[float]:
     return [float(row[key]) for row in rows]
 
 
-def _plot_pair(ax, n: list[float], rows, exact_key: str, hnsw_key: str, title: str, ylabel: str) -> None:
-    ax.plot(n, _values(rows, exact_key), marker="o", label="Exact")
-    ax.plot(n, _values(rows, hnsw_key), marker="o", label="HNSW")
+def _plot_pair(
+    ax,
+    n: list[float],
+    rows,
+    exact_key: str,
+    hnsw_key: str,
+    title: str,
+    ylabel: str,
+) -> None:
+    ax.plot(
+        n,
+        _values(rows, exact_key),
+        marker="o",
+        linewidth=2,
+        label="Exact",
+    )
+    ax.plot(
+        n,
+        _values(rows, hnsw_key),
+        marker="o",
+        linewidth=2,
+        label="HNSW",
+    )
     ax.set_title(title)
     ax.set_xlabel("Effective searchable embeddings")
     ax.set_ylabel(ylabel)
@@ -76,12 +96,25 @@ def save_dashboard(
     )
 
     recall = [value * 100.0 for value in _values(rows, "recall_at_k")]
-    axes[0, 3].plot(n, recall, marker="o")
+    axes[0, 3].axhline(
+        100.0,
+        linestyle="--",
+        linewidth=1,
+        label="Exact reference (100%)",
+    )
+    axes[0, 3].plot(
+        n,
+        recall,
+        marker="o",
+        linewidth=2,
+        label=f"HNSW Recall@{k}",
+    )
     axes[0, 3].set_title(f"Recall@{k}")
     axes[0, 3].set_xlabel("Effective searchable embeddings")
     axes[0, 3].set_ylabel("Recall (%)")
     axes[0, 3].set_ylim(0.0, 105.0)
     axes[0, 3].grid(True, alpha=0.25)
+    axes[0, 3].legend()
 
     _plot_pair(
         axes[1, 0],
@@ -102,7 +135,12 @@ def save_dashboard(
         "RSS delta (MB)",
     )
 
-    axes[1, 2].plot(n, _values(rows, "speedup_p95"), marker="o")
+    axes[1, 2].plot(
+        n,
+        _values(rows, "speedup_p95"),
+        marker="o",
+        linewidth=2,
+    )
     axes[1, 2].axhline(1.0, linestyle="--", linewidth=1)
     axes[1, 2].set_title("p95 speedup")
     axes[1, 2].set_xlabel("Effective searchable embeddings")
