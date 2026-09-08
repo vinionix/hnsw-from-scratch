@@ -6,6 +6,9 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
+EXACT_COLOR = "tab:blue"
+HNSW_COLOR = "tab:orange"
+
 
 def _parse_value(value: str) -> float | str:
     try:
@@ -41,6 +44,7 @@ def _plot_pair(
         _values(rows, exact_key),
         marker="o",
         linewidth=2,
+        color=EXACT_COLOR,
         label="Exact",
     )
     ax.plot(
@@ -48,6 +52,7 @@ def _plot_pair(
         _values(rows, hnsw_key),
         marker="o",
         linewidth=2,
+        color=HNSW_COLOR,
         label="HNSW",
     )
     ax.set_title(title)
@@ -100,6 +105,7 @@ def save_dashboard(
         100.0,
         linestyle="--",
         linewidth=1,
+        color=EXACT_COLOR,
         label="Exact reference (100%)",
     )
     axes[0, 3].plot(
@@ -107,6 +113,7 @@ def save_dashboard(
         recall,
         marker="o",
         linewidth=2,
+        color=HNSW_COLOR,
         label=f"HNSW Recall@{k}",
     )
     axes[0, 3].set_title(f"Recall@{k}")
@@ -140,12 +147,21 @@ def save_dashboard(
         _values(rows, "speedup_p95"),
         marker="o",
         linewidth=2,
+        color=HNSW_COLOR,
+        label="HNSW speedup",
     )
-    axes[1, 2].axhline(1.0, linestyle="--", linewidth=1)
+    axes[1, 2].axhline(
+        1.0,
+        linestyle="--",
+        linewidth=1,
+        color=EXACT_COLOR,
+        label="No speedup",
+    )
     axes[1, 2].set_title("p95 speedup")
     axes[1, 2].set_xlabel("Effective searchable embeddings")
     axes[1, 2].set_ylabel("Exact p95 / HNSW p95")
     axes[1, 2].grid(True, alpha=0.25)
+    axes[1, 2].legend()
 
     config_ax = axes[1, 3]
     config_ax.axis("off")
