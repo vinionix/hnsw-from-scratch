@@ -183,7 +183,7 @@ benchmarks/results/results.csv
 
 Campos adicionais registram o tipo de dataset, número de clusters e dispersão usada.
 
-## Gráficos
+## Dashboard de resultados
 
 Depois do benchmark:
 
@@ -191,14 +191,24 @@ Depois do benchmark:
 python benchmarks/plot_results.py
 ```
 
-Isso gera:
+Isso gera um único arquivo:
 
 ```text
-benchmarks/results/latency_p95.png
-benchmarks/results/recall_at_k.png
+benchmarks/results/benchmark_dashboard.png
 ```
 
-O gráfico de recall usa automaticamente o `k` registrado no CSV; com a configuração padrão, ele exibe **Recall@3**.
+O dashboard compila em uma única figura:
+
+- latência **p50**: Exact vs HNSW;
+- latência **p95**: Exact vs HNSW;
+- latência média: Exact vs HNSW;
+- **Recall@K** em percentual;
+- tempo de construção: Exact vs HNSW;
+- variação aproximada de memória RSS;
+- speedup de p95;
+- configuração usada no experimento (`k`, `m`, `ef_search`, `ef_construction`, dataset etc.).
+
+Assim, o resultado principal da execução pode ser analisado em um único lugar, sem precisar cruzar vários arquivos PNG.
 
 ## Estrutura
 
