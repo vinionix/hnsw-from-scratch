@@ -243,7 +243,7 @@ def main() -> None:
     )
     parser.add_argument("--clusters", type=int, default=32)
     parser.add_argument("--cluster-spread", type=float, default=0.35)
-    parser.add_argument("--m", type=int, default=16)
+    parser.add_argument("--m", type=int, default=48)
     parser.add_argument("--ef-construction", type=int, default=200)
     parser.add_argument("--ef-search", type=int, default=50)
     parser.add_argument("--seed", type=int, default=42)
